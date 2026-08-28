@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="320" viewBox="0 0 1200 320" role="img" aria-labelledby="title desc">
+  <title id="title">SchunkOps Microsoft 365</title>
+  <desc id="desc">Enterprise Microsoft 365 and Entra ID audit toolkit by David Schunk</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#07162f"/>
+      <stop offset="1" stop-color="#123e70"/>
+    </linearGradient>
+    <pattern id="grid" width="36" height="36" patternUnits="userSpaceOnUse">
+      <path d="M 36 0 L 0 0 0 36" fill="none" stroke="#4ea1ff" stroke-opacity=".12"/>
+    </pattern>
+  </defs>
+  <rect width="1200" height="320" rx="24" fill="url(#bg)"/>
+  <rect width="1200" height="320" rx="24" fill="url(#grid)"/>
+  <circle cx="1040" cy="70" r="190" fill="#d4a72c" opacity=".10"/>
+  <path d="M100 78h64l31 31v64l-31 31h-64l-31-31v-64z" fill="none" stroke="#d4a72c" stroke-width="8"/>
+  <path d="M100 114h64M100 144h64M100 174h38" stroke="#fff" stroke-width="8" stroke-linecap="round"/>
+  <text x="240" y="126" fill="#ffffff" font-family="Segoe UI,Arial,sans-serif" font-size="56" font-weight="700">SchunkOps Microsoft 365</text>
+  <text x="242" y="181" fill="#8ec5ff" font-family="Segoe UI,Arial,sans-serif" font-size="27">Tenant security • Identity • Exchange • Teams • Licensing</text>
+  <text x="242" y="238" fill="#d4a72c" font-family="Segoe UI,Arial,sans-serif" font-size="21" font-weight="600" letter-spacing="2">READ-ONLY • OBJECT-FIRST • LEAST PRIVILEGE</text>
+</svg>

@@ -1,0 +1,46 @@
+name: Bug report
+description: Report reproducible behavior using sanitized details
+title: "[Bug]: "
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: "Never include tenant names, domains, identities, object IDs, tokens, or raw exports."
+  - type: input
+    id: script
+    attributes:
+      label: Script
+      placeholder: Get-M365InactiveUser.ps1
+    validations:
+      required: true
+  - type: input
+    id: versions
+    attributes:
+      label: PowerShell and module versions
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior and sanitized error
+    validations:
+      required: true
+  - type: textarea
+    id: testing
+    attributes:
+      label: Safe reproduction steps
+    validations:
+      required: true
+  - type: checkboxes
+    id: privacy
+    attributes:
+      label: Privacy confirmation
+      options:
+        - label: I removed all tenant and personal data.
+          required: true

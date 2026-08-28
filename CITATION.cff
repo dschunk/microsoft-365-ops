@@ -1,0 +1,11 @@
+cff-version: 1.2.0
+message: "If you use SchunkOps Microsoft 365, please cite this repository."
+title: "SchunkOps Microsoft 365"
+type: software
+authors:
+  - family-names: Schunk
+    given-names: David
+url: "https://github.com/dschunk/microsoft-365-ops"
+repository-code: "https://github.com/dschunk/microsoft-365-ops"
+license: MIT
+date-released: 2026-08-28

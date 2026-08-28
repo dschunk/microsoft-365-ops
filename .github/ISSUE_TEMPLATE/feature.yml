@@ -1,0 +1,33 @@
+name: Tool proposal
+description: Propose a focused read-only Microsoft 365 operation
+title: "[Tool]: "
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Operational question
+      description: What decision should the tool help an administrator make?
+    validations:
+      required: true
+  - type: textarea
+    id: sources
+    attributes:
+      label: Service, command, permissions, and license
+    validations:
+      required: true
+  - type: textarea
+    id: output
+    attributes:
+      label: Proposed object properties
+    validations:
+      required: true
+  - type: checkboxes
+    id: safety
+    attributes:
+      label: Safety
+      options:
+        - label: The proposal can be implemented read-only.
+          required: true
+        - label: No real tenant data is included.
+          required: true
