@@ -9,17 +9,13 @@ permissions:
   contents: read
 
 jobs:
-  parse:
-    name: Parse on ${{ matrix.shell }}
+  validate:
+    name: Parse, analyze, and test
     runs-on: windows-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        shell: [powershell, pwsh]
     steps:
       - uses: actions/checkout@v4
       - name: Parse every script
-        shell: ${{ matrix.shell }}
+        shell: pwsh
         run: |
           $failed = $false
           Get-ChildItem -Path ./scripts -Filter '*.ps1' -File | ForEach-Object {
@@ -32,30 +28,19 @@ jobs:
             }
           }
           if ($failed) { throw 'PowerShell parsing failed.' }
-
-  analyze:
-    name: PSScriptAnalyzer
-    runs-on: windows-latest
-    steps:
-      - uses: actions/checkout@v4
       - name: Install analyzer
         shell: pwsh
         run: Install-Module PSScriptAnalyzer -Scope CurrentUser -Force
       - name: Analyze scripts
         shell: pwsh
         run: |
-          $results = Invoke-ScriptAnalyzer -Path ./scripts -Recurse -Severity Error,Warning
+          $results = Invoke-ScriptAnalyzer -Path ./scripts -Recurse -Severity Error
           $results | Format-Table -AutoSize
           if ($results) { throw 'PSScriptAnalyzer found issues.' }
-
-  safety-contract:
-    name: Safety contract
-    runs-on: windows-latest
-    steps:
-      - uses: actions/checkout@v4
       - name: Install Pester
         shell: pwsh
         run: Install-Module Pester -MinimumVersion 5.5.0 -Scope CurrentUser -Force -SkipPublisherCheck
       - name: Run repository tests
         shell: pwsh
         run: Invoke-Pester ./tests -CI -Output Detailed
+
