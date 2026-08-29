@@ -10,7 +10,7 @@ Describe 'Repository safety contract' {
 
     It 'includes comment-based help in every script' {
         foreach ($scriptFile in $scriptFiles) {
-            $help = Get-Help $scriptFile.FullName
+            $help = Get-Help $scriptFile.FullName -Full
             $help.Synopsis | Should -Not -BeNullOrEmpty -Because $scriptFile.Name
             $help.Examples.Example.Count | Should -BeGreaterThan 0 -Because $scriptFile.Name
         }
