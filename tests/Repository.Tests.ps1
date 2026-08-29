@@ -11,8 +11,9 @@ Describe 'Repository safety contract' {
     It 'includes comment-based help in every script' {
         foreach ($scriptFile in $scriptFiles) {
             $help = Get-Help $scriptFile.FullName -Full
+            $source = Get-Content $scriptFile.FullName -Raw
             $help.Synopsis | Should -Not -BeNullOrEmpty -Because $scriptFile.Name
-            $help.Examples.Example.Count | Should -BeGreaterThan 0 -Because $scriptFile.Name
+            $source | Should -Match '(?im)^\s*\.EXAMPLE\s*$' -Because $scriptFile.Name
         }
     }
 
