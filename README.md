@@ -4,6 +4,8 @@
 
 # SchunkOps Microsoft 365
 
+> **Personal project notice:** This repository is independently maintained in a personal/open-source capacity and is not affiliated with, sponsored by, or endorsed by any current or former employer. It is intended to contain only generic, reusable Microsoft 365 administration and security-audit tooling. Do not contribute employer confidential or proprietary information, non-public tenant configuration, customer data, credentials, employer source code, or employer work product.
+
 [![PowerShell](https://img.shields.io/badge/PowerShell-7%2B-2671BE?logo=powershell&logoColor=white)](https://learn.microsoft.com/powershell/)
 [![CI](https://github.com/dschunk/microsoft-365-ops/actions/workflows/validate.yml/badge.svg)](https://github.com/dschunk/microsoft-365-ops/actions/workflows/validate.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-d4a72c.svg)](LICENSE)
@@ -131,11 +133,11 @@ GitHub Actions parses every script on Windows PowerShell and PowerShell 7, runs 
 
 ## Contributing
 
-Issues and pull requests are welcome. Please sanitize tenant names, domains, user identities, object IDs, and exported data before sharing diagnostics. See [CONTRIBUTING.md](CONTRIBUTING.md) and [SECURITY.md](SECURITY.md).
+Issues and pull requests are welcome. Please sanitize tenant names, domains, user identities, object IDs, exported data, and any employer-specific information before sharing diagnostics. See [CONTRIBUTING.md](CONTRIBUTING.md) and [SECURITY.md](SECURITY.md).
 
 ## Author and attribution
 
-Built and maintained by [David Schunk](https://www.davidschunk.com/) — Senior IT Engineer, infrastructure builder, automation advocate, writer, and podcaster.
+Built and maintained by [David Schunk](https://www.davidschunk.com/) in a personal/open-source capacity.
 
 - [LinkedIn](https://www.linkedin.com/in/dschunk/)
 - [Best Practices for Everyday IT newsletter](https://www.linkedin.com/newsletters/best-practices-for-everyday-it-7075059974573314048/)
