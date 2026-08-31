@@ -69,7 +69,7 @@ Get-MgReportAuthenticationMethodUserRegistrationDetail -All | ForEach-Object {
 }
 
 $staleCutoff = (Get-Date).ToUniversalTime().AddDays(-$StaleSignInDays)
-foreach ($userId in $userAssignments.Keys) {
+$results = foreach ($userId in $userAssignments.Keys) {
     $user = Get-MgUser -UserId $userId -Property @(
         'id','displayName','userPrincipalName','accountEnabled','userType','createdDateTime',
         'signInActivity','assignedLicenses','onPremisesSyncEnabled'
@@ -117,4 +117,7 @@ foreach ($userId in $userAssignments.Keys) {
         ReviewPriority = $priority
         Findings = $findings
     }
-} | Sort-Object ReviewPriority,UserPrincipalName
+}
+
+$priorityRank = @{ Critical = 0; High = 1; Informational = 2 }
+$results | Sort-Object @{ Expression = { $priorityRank[$_.ReviewPriority] } }, UserPrincipalName
