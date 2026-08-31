@@ -7,6 +7,11 @@ Use a dedicated administrative account, just-in-time elevation, and the narrowes
 | `Get-M365UserSupportSnapshot.ps1` | Microsoft Graph | `User.Read.All`; `AuditLog.Read.All` for sign-in activity |
 | `Get-M365UserLicenseAssignment.ps1` | Microsoft Graph | `User.Read.All`, `Organization.Read.All` |
 | `Get-ExchangeMailboxSupportSnapshot.ps1` | Exchange Online | Recipient and mailbox statistics read access |
+| `Get-M365SignInFailureSummary.ps1` | Microsoft Graph Reports | `AuditLog.Read.All` |
+| `Get-M365ServiceHealthIncident.ps1` | Microsoft Graph service announcements | `ServiceHealth.Read.All` |
+| `Get-EntraPrivilegedUserReview.ps1` | Microsoft Graph | `RoleManagement.Read.Directory`, `Directory.Read.All`, `User.Read.All`, `AuditLog.Read.All` |
+| `Get-ExchangeTransportRuleAudit.ps1` | Exchange Online | View-Only Configuration / permission to read transport rules and accepted domains |
+| `Get-ExchangeMailboxDelegateExposure.ps1` | Exchange Online | Recipient and mailbox / recipient permission read access |
 | `Get-M365LicenseReport.ps1` | Microsoft Graph | `Organization.Read.All` |
 | `Get-M365InactiveUser.ps1` | Microsoft Graph | `User.Read.All`, `AuditLog.Read.All` |
 | `Get-MfaRegistrationReport.ps1` | Microsoft Graph Reports | `AuditLog.Read.All`; Reports Reader or equivalent |
@@ -20,11 +25,13 @@ Use a dedicated administrative account, just-in-time elevation, and the narrowes
 | `Get-TeamsExternalAccessConfiguration.ps1` | Microsoft Teams | A role permitted to read federation configuration |
 | `Export-M365SecuritySnapshot.ps1` | Graph and optional Exchange | Union of the reports selected |
 
-## Help desk principle
+## Support-tier principle
 
 Read access should be delegated intentionally. A support technician does not need Global Administrator simply because a troubleshooting script can query several services.
 
-Where your organization separates help desk, identity, messaging, and security responsibilities, run only the script that matches the support tier and escalate with its output rather than broadening the technician's role.
+Where your organization separates help desk, identity, messaging, security, and tenant engineering responsibilities, run only the script that matches the support tier and escalate with its output rather than broadening the technician's role.
+
+The senior-admin tools are also read-only. They are intended to correlate existing tenant evidence, not to change state. In particular, they do not reset passwords, revoke sessions, modify MFA, assign roles, edit mail-flow rules, or remove mailbox delegates.
 
 ## Verify the active Graph context
 

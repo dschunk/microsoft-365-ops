@@ -4,8 +4,8 @@ BeforeAll {
 }
 
 Describe 'Repository safety contract' {
-    It 'ships the documented fifteen scripts' {
-        $scriptFiles.Count | Should -Be 15
+    It 'ships the documented twenty scripts' {
+        $scriptFiles.Count | Should -Be 20
     }
 
     It 'includes comment-based help in every script' {
@@ -50,23 +50,29 @@ Describe 'Repository safety contract' {
         }
     }
 
-    It 'keeps the three help desk snapshot tools read-only' {
-        $supportScripts = @(
+    It 'keeps support and senior tenant diagnostics read-only' {
+        $readOnlyScripts = @(
             'Get-M365UserSupportSnapshot.ps1',
             'Get-M365UserLicenseAssignment.ps1',
-            'Get-ExchangeMailboxSupportSnapshot.ps1'
+            'Get-ExchangeMailboxSupportSnapshot.ps1',
+            'Get-M365SignInFailureSummary.ps1',
+            'Get-M365ServiceHealthIncident.ps1',
+            'Get-EntraPrivilegedUserReview.ps1',
+            'Get-ExchangeTransportRuleAudit.ps1',
+            'Get-ExchangeMailboxDelegateExposure.ps1'
         )
-        $forbiddenVerbs = 'Set|New|Remove|Add|Update|Reset|Revoke|Enable|Disable'
+        $forbiddenVerbPattern = '^(Set|New|Remove|Add|Update|Reset|Revoke|Enable|Disable)-'
 
-        foreach ($name in $supportScripts) {
+        foreach ($name in $readOnlyScripts) {
             $path = Join-Path $scriptDirectory $name
             $tokens = $null
             $errors = $null
             $ast = [System.Management.Automation.Language.Parser]::ParseFile($path, [ref]$tokens, [ref]$errors)
-            $commands = $ast.FindAll({ param($node) $node -is [System.Management.Automation.Language.CommandAst] }, $true) |
+            $errors | Should -BeNullOrEmpty -Because $name
+            $commands = @($ast.FindAll({ param($node) $node -is [System.Management.Automation.Language.CommandAst] }, $true) |
                 ForEach-Object { $_.GetCommandName() } |
-                Where-Object { $_ }
-            $commands -join ',' | Should -Not -Match "(?i)^(?:.*[,])?(?:$forbiddenVerbs)-" -Because $name
+                Where-Object { $_ })
+            @($commands | Where-Object { $_ -match $forbiddenVerbPattern }) | Should -BeNullOrEmpty -Because $name
         }
     }
 }
