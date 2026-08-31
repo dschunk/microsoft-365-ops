@@ -66,4 +66,4 @@ Get-MgServiceAnnouncementIssue -All | Where-Object {
         FeatureGroup = $_.FeatureGroup
         HighImpact = [bool]$_.IsHighImpact
     }
-} | Sort-Object IsActive -Descending,LastModifiedDateTime -Descending
+} | Sort-Object @{ Expression = 'IsActive'; Descending = $true }, @{ Expression = 'LastModifiedDateTime'; Descending = $true }
