@@ -64,11 +64,7 @@ The report preserves service, feature, status, classification, start/end time, l
 A role assignment by itself is not enough context. Correlate privileged roles with account state, sign-in activity, and MFA registration:
 
 ```powershell
-Connect-MgGraph -Scopes \
-    'RoleManagement.Read.Directory',\
-    'Directory.Read.All',\
-    'User.Read.All',\
-    'AuditLog.Read.All'
+Connect-MgGraph -Scopes 'RoleManagement.Read.Directory','Directory.Read.All','User.Read.All','AuditLog.Read.All'
 
 ./scripts/Get-EntraPrivilegedUserReview.ps1
 ```
