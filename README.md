@@ -11,26 +11,60 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-d4a72c.svg)](LICENSE)
 [![Security: read only](https://img.shields.io/badge/default-read--only-2ea44f)](SECURITY.md)
 
-Practical, inspectable PowerShell audits for Microsoft 365, Microsoft Entra ID, Exchange Online, and Teams. The toolkit is designed for administrators who need **useful answers without giving an unknown script permission to change their tenant**.
+**Fifteen read-only PowerShell tools for Microsoft 365 support, Entra ID, Exchange Online, Teams, tenant review, and incident evidence.**
 
-Every command emits PowerShell objects, supports normal pipelines and exports, and documents the permissions it needs. No credentials are accepted. No secrets are stored. No tenant data is included in this repository.
+The goal is to make the same repository useful at multiple support tiers: help desk gets fast user/mailbox facts, Microsoft 365 admins get clean audits, and senior engineers get reproducible tenant evidence without handing an unknown script permission to change the environment.
 
-## Why this exists
+## Start here by problem
 
-Tenant reviews often begin with five deceptively simple questions:
+| Problem | Start with |
+|---|---|
+| **User cannot sign in / account looks wrong** | [`Get-M365UserSupportSnapshot.ps1`](scripts/Get-M365UserSupportSnapshot.ps1) |
+| **User is missing an app or license** | [`Get-M365UserLicenseAssignment.ps1`](scripts/Get-M365UserLicenseAssignment.ps1) |
+| **Outlook / mailbox issue** | [`Get-ExchangeMailboxSupportSnapshot.ps1`](scripts/Get-ExchangeMailboxSupportSnapshot.ps1) |
+| **MFA registration review** | [`Get-MfaRegistrationReport.ps1`](scripts/Get-MfaRegistrationReport.ps1) |
+| **External forwarding concern** | `Get-ExchangeMailboxForwardingAudit.ps1` + `Get-ExternalInboxRule.ps1` |
+| **Shared mailbox access** | [`Get-SharedMailboxPermission.ps1`](scripts/Get-SharedMailboxPermission.ps1) |
+| **Teams external communication** | [`Get-TeamsExternalAccessConfiguration.ps1`](scripts/Get-TeamsExternalAccessConfiguration.ps1) |
+| **Privileged access / Entra roles** | [`Get-EntraRoleAssignment.ps1`](scripts/Get-EntraRoleAssignment.ps1) |
+| **Full tenant evidence capture** | [`Export-M365SecuritySnapshot.ps1`](scripts/Export-M365SecuritySnapshot.ps1) |
 
-- Who has privileged access?
-- Which accounts are inactive, unlicensed, or missing MFA?
-- Where can mail leave the organization automatically?
-- Which guests, shared mailboxes, and external access paths need review?
-- Can we capture a repeatable security snapshot before an incident or change?
+Help desk and escalation workflows: **[SchunkOps Microsoft 365 Help Desk Field Guide](docs/HELPDESK.md)**.
 
-This project turns those questions into small, auditable tools rather than a single opaque mega-script.
+## Help desk: first-contact user snapshot
+
+```powershell
+Connect-MgGraph -Scopes 'User.Read.All','AuditLog.Read.All'
+./scripts/Get-M365UserSupportSnapshot.ps1 -UserPrincipalName alex@contoso.com
+```
+
+The snapshot returns account state, user type, last sign-in, last password change, license count, usage location, organizational metadata, and on-premises synchronization state in one object.
+
+Need friendly license assignments?
+
+```powershell
+Connect-MgGraph -Scopes 'User.Read.All','AuditLog.Read.All','Organization.Read.All'
+./scripts/Get-M365UserLicenseAssignment.ps1 -UserPrincipalName alex@contoso.com
+```
+
+Need the Exchange side?
+
+```powershell
+Connect-ExchangeOnline
+./scripts/Get-ExchangeMailboxSupportSnapshot.ps1 -Identity alex@contoso.com
+```
+
+The mailbox snapshot collects recipient type, SMTP aliases, archive status, retention / hold context, mailbox-level forwarding, and mailbox statistics when available.
+
+**None of those three tools reset a password, change MFA, assign a license, edit forwarding, or modify the mailbox.** They exist to reduce uncertainty before someone starts clicking buttons.
 
 ## Tool catalog
 
 | Tool | What it answers | Service |
 |---|---|---|
+| `Get-M365UserSupportSnapshot.ps1` | What is the current support state of this user account? | Microsoft Graph |
+| `Get-M365UserLicenseAssignment.ps1` | Which friendly tenant SKUs are assigned to this user? | Microsoft Graph |
+| `Get-ExchangeMailboxSupportSnapshot.ps1` | What is the current mailbox / forwarding / size context for this identity? | Exchange Online |
 | `Get-M365LicenseReport.ps1` | Which licenses are assigned, consumed, and available? | Microsoft Graph |
 | `Get-M365InactiveUser.ps1` | Which enabled member accounts have gone quiet? | Microsoft Graph |
 | `Get-EntraRoleAssignment.ps1` | Who holds privileged Entra roles, directly or through groups? | Microsoft Graph |
@@ -43,6 +77,21 @@ This project turns those questions into small, auditable tools rather than a sin
 | `Get-TeamsExternalAccessConfiguration.ps1` | How is Teams federation and external access configured? | Microsoft Teams |
 | `Test-M365DomainHealth.ps1` | Are tenant domains verified and healthy? | Microsoft Graph |
 | `Export-M365SecuritySnapshot.ps1` | Can I preserve a timestamped, hashed audit bundle? | Graph + Exchange |
+
+## Why this exists
+
+Microsoft 365 tickets and reviews often begin with deceptively simple questions:
+
+- Is the user actually enabled and signing in?
+- Is this account cloud-only or synchronized from Active Directory?
+- Does the user really have the expected license?
+- Who has privileged access?
+- Which accounts are inactive or missing MFA?
+- Where can mail leave the organization automatically?
+- Which guests, shared mailboxes, and external access paths need review?
+- Can we preserve a repeatable tenant snapshot before an incident or change?
+
+This project turns those questions into small, auditable tools rather than a single opaque mega-script.
 
 ## Safe quick start
 
@@ -80,19 +129,29 @@ Connect-ExchangeOnline
 
 | Capability | Suggested delegated permission / role |
 |---|---|
+| User support snapshot | `User.Read.All`; `AuditLog.Read.All` for sign-in activity |
+| User license resolution | `User.Read.All`, `Organization.Read.All` |
 | Users and guests | `User.Read.All`, `AuditLog.Read.All` |
 | Licenses and domains | `Organization.Read.All`, `Domain.Read.All` |
 | Entra roles | `RoleManagement.Read.Directory`, `Directory.Read.All` |
 | MFA registration | `AuditLog.Read.All` plus Reports Reader or equivalent |
 | Conditional Access | `Policy.Read.All` |
-| Exchange audits | Exchange View-Only Recipients / View-Only Configuration where sufficient |
+| Exchange support / audits | Exchange View-Only Recipients / View-Only Configuration where sufficient |
 | Teams federation | Teams Communications Support Engineer or appropriate read role |
 
 Permissions vary by tenant configuration and Microsoft may change API requirements. Review the current Microsoft documentation and your organization's access policy before connecting.
 
-Detailed guidance: [permission map](docs/PERMISSIONS.md) · [operator checklist](docs/OPERATOR-CHECKLIST.md) · [threat model](docs/THREAT-MODEL.md) · [roadmap](ROADMAP.md)
+Detailed guidance: [help desk field guide](docs/HELPDESK.md) · [permission map](docs/PERMISSIONS.md) · [operator checklist](docs/OPERATOR-CHECKLIST.md) · [threat model](docs/THREAT-MODEL.md) · [roadmap](ROADMAP.md)
 
 ## Operational patterns
+
+### Export a user support record
+
+```powershell
+./scripts/Get-M365UserSupportSnapshot.ps1 -UserPrincipalName alex@contoso.com |
+    ConvertTo-Json -Depth 5 |
+    Set-Content ./alex-support-snapshot.json
+```
 
 ### Export clean CSV
 
@@ -121,6 +180,7 @@ The snapshot command writes JSON and CSV reports, a manifest, SHA-256 hashes, an
 ## Design promises
 
 - **Read-only by default.** Inventory and reporting are the product.
+- **Support before remediation.** Establish account, license, mailbox, and policy facts before changing state.
 - **Object-first output.** Formatting belongs to the operator, not the function.
 - **No credential handling.** Authentication remains with Microsoft's supported modules.
 - **Partial failure is visible.** Missing permissions become actionable errors, not empty “success.”
@@ -129,7 +189,7 @@ The snapshot command writes JSON and CSV reports, a manifest, SHA-256 hashes, an
 
 ## Validation
 
-GitHub Actions parses every script on Windows PowerShell and PowerShell 7, runs PSScriptAnalyzer, and enforces a Pester safety contract. The tests reject embedded authentication and credential-like parameters. CI validates code quality; real-tenant behavior must still be tested in a non-production tenant with your policies and licenses.
+GitHub Actions parses every script on Windows PowerShell and PowerShell 7, runs PSScriptAnalyzer, and enforces a Pester safety contract. The tests reject embedded authentication and credential-like parameters and enforce the read-only contract for help desk snapshot tools. CI validates code quality; real-tenant behavior must still be tested in a non-production tenant with your policies and licenses.
 
 ## Contributing
 
@@ -148,4 +208,3 @@ If this toolkit saves you time, star the repository, link back to it in internal
 ## License
 
 [MIT](LICENSE) © David Schunk
-
