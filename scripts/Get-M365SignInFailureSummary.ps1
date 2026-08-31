@@ -70,9 +70,12 @@ $rows | Group-Object UserPrincipalName,AppDisplayName,ClientAppUsed,ErrorCode,Fa
         FirstSeenUtc = $first.CreatedDateTime.ToUniversalTime()
         LastSeenUtc = $last.CreatedDateTime.ToUniversalTime()
         IPAddresses = @($items.IPAddress | Where-Object { $_ } | Sort-Object -Unique)
-        Locations = @($items | ForEach-Object { @($_.City,$_.State,$_.CountryOrRegion) -ne $null -join ', ' } | Where-Object { $_ } | Sort-Object -Unique)
+        Locations = @($items | ForEach-Object {
+            $parts = @($_.City, $_.State, $_.CountryOrRegion) | Where-Object { -not [string]::IsNullOrWhiteSpace([string]$_) }
+            if ($parts.Count -gt 0) { $parts -join ', ' }
+        } | Where-Object { $_ } | Sort-Object -Unique)
         ConditionalAccessStatuses = @($items.ConditionalAccessStatus | Where-Object { $_ } | Sort-Object -Unique)
         RiskLevels = @($items.RiskLevelAggregated | Where-Object { $_ } | Sort-Object -Unique)
         CorrelationIds = @($items.CorrelationId | Where-Object { $_ } | Sort-Object -Unique)
     }
-} | Sort-Object Count -Descending,LastSeenUtc -Descending
+} | Sort-Object @{ Expression = 'Count'; Descending = $true }, @{ Expression = 'LastSeenUtc'; Descending = $true }
