@@ -2,6 +2,17 @@
 
 All notable changes to this project are documented here.
 
+## 1.2.0 — 2026-08-31
+
+- Expanded the toolkit from fifteen to twenty read-only Microsoft 365 operations tools.
+- Added `Get-M365SignInFailureSummary.ps1` to group Entra sign-in failures by user, application, client, error code, and failure reason while preserving timestamps, IPs, Conditional Access state, risk, and correlation IDs.
+- Added `Get-M365ServiceHealthIncident.ps1` for current and recent Microsoft 365 service-health incidents from Graph service announcements.
+- Added `Get-EntraPrivilegedUserReview.ps1` to correlate privileged role assignments with account state, successful sign-in activity, and MFA registration.
+- Added `Get-ExchangeTransportRuleAudit.ps1` for mail-flow rule actions, external routing/copy targets, deletion, rejection, quarantine, and stop-processing review.
+- Added `Get-ExchangeMailboxDelegateExposure.ps1` for Full Access, Send As, and Send on Behalf exposure across user and shared mailboxes.
+- Added a Senior Admin Field Guide for sign-in failure, service-health, privileged-account, mail-flow, delegation, and incident-evidence workflows.
+- Expanded the permission map and Pester safety contract for the five senior tenant diagnostics.
+
 ## 1.1.0 — 2026-08-31
 
 - Expanded the toolkit from twelve to fifteen read-only Microsoft 365 operations tools.
