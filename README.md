@@ -34,7 +34,7 @@ Help desk gets fast user and mailbox facts. Microsoft 365 admins get clean audit
 | **Teams external communication** | [`Get-TeamsExternalAccessConfiguration.ps1`](scripts/Get-TeamsExternalAccessConfiguration.ps1) |
 | **Full tenant evidence capture** | [`Export-M365SecuritySnapshot.ps1`](scripts/Export-M365SecuritySnapshot.ps1) |
 
-Field guides: **[Help Desk](docs/HELPDESK.md)** · **[Senior Admin](docs/SENIOR-ADMIN.md)**.
+Field guides: **[Help Desk](docs/HELPDESK.md)** · **[Senior Admin](docs/SENIOR-ADMIN.md)** · **[Classroom & Lab Guide](docs/CLASSROOM.md)**.
 
 ## Help desk: establish the facts first
 
