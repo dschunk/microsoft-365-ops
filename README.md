@@ -17,6 +17,13 @@ Help desk gets fast user and mailbox facts. Microsoft 365 admins get clean audit
 
 > **Collect first. Change second. Document always.**
 
+## Companion field guides
+
+- [Troubleshoot Microsoft Entra Connect Sync errors](https://everydayittips.com/guides/entra-connect-sync-error-troubleshooting/) — isolate Connect Sync scheduler, connector, export, and object-level problems before attempting a full synchronization.
+- [Audit Exchange Online shared mailbox permissions and forwarding](https://everydayittips.com/guides/exchange-online-shared-mailbox-audit/) — a controlled review of Full Access, Send As, Send on Behalf, and mailbox-level forwarding with read-only PowerShell.
+
+These articles complement the repository's read-only scripts; neither guide is an unattended tenant remediation workflow.
+
 ## Start here by problem
 
 | Problem | Start with |
